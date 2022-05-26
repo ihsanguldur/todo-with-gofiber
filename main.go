@@ -4,6 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"log"
 	"todo/database"
+	"todo/routes"
 )
 
 func main() {
@@ -11,11 +12,9 @@ func main() {
 	app := fiber.New()
 	database.ConnectDB()
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		
-		return c.Send([]byte("Hello"))
-
-	})
+	api := app.Group("/api")
+	routes.UserRouter(api)
+	routes.TodoRouter(api)
 
 	log.Fatal(app.Listen(":8080"))
 
