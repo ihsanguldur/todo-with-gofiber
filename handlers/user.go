@@ -1,7 +1,9 @@
 package handlers
 
 import (
+	"errors"
 	"github.com/gofiber/fiber/v2"
+	"gorm.io/gorm"
 	"strings"
 	"todo/database"
 	"todo/models"
@@ -36,4 +38,21 @@ func Create(ctx *fiber.Ctx) error {
 	}
 
 	return utils.SuccessPresenter(user, "User created.", ctx)
+}
+
+func GetUser(ctx *fiber.Ctx) error {
+
+	var err error
+	user := new(models.User)
+
+	id := ctx.Params("id")
+
+	if err = database.DB.First(&user, id).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return fiber.NewError(fiber.StatusNotFound, "User not found.")
+		}
+		return err
+	}
+
+	return utils.SuccessPresenter(user, "User Found.", ctx)
 }

@@ -8,5 +8,5 @@ import (
 func UserRouter(api fiber.Router) {
 
 	api.Post("/user", handlers.Create)
-
+	api.Get("/user/:id", handlers.GetUser)
 }
