@@ -5,16 +5,18 @@ import (
 	"log"
 	"todo/database"
 	"todo/routes"
+	"todo/utils"
 )
 
 func main() {
 
-	app := fiber.New()
 	database.ConnectDB()
 
-	api := app.Group("/api")
-	routes.UserRouter(api)
-	routes.TodoRouter(api)
+	app := fiber.New(fiber.Config{
+		ErrorHandler: utils.ErrorHandler,
+	})
+
+	routes.SetupRoutes(app)
 
 	log.Fatal(app.Listen(":8080"))
 

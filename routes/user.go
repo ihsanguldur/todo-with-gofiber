@@ -1,22 +1,25 @@
 package routes
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"github.com/gofiber/fiber/v2"
+	"todo/utils"
+)
 
 func UserRouter(api fiber.Router) {
 
 	api.Get("/user", func(ctx *fiber.Ctx) error {
-		return ctx.Send([]byte("user get."))
+		return utils.SuccessPresenter(nil, "user get.", ctx)
 	})
 
 	api.Post("/user", func(ctx *fiber.Ctx) error {
-		return ctx.Send([]byte("user post."))
+		return utils.SuccessPresenter(nil, "user post.", ctx)
 	})
 
 	api.Put("/user", func(ctx *fiber.Ctx) error {
-		return ctx.Send([]byte("user put."))
+		return utils.SuccessPresenter(nil, "user put.", ctx)
 	})
 
 	api.Delete("/user", func(ctx *fiber.Ctx) error {
-		return ctx.Send([]byte("user delete."))
+		return utils.SuccessPresenter(nil, "user delete.", ctx)
 	})
 }
