@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"strings"
 	"todo/database"
 	"todo/models"
 	"todo/utils"
@@ -24,8 +25,14 @@ func Create(ctx *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusBadRequest, "Email is not valid.")
 	}
 
+	user.UserPassword = utils.HashPassword(user.UserPassword)
+
 	if err = database.DB.Create(user).Error; err != nil {
-		return fiber.NewError(fiber.StatusBadRequest, "Please Check Your Credentials.")
+		message := "Please Check Your Credentials."
+		if strings.Contains(err.Error(), "23505") {
+			message = "Email is already in use."
+		}
+		return fiber.NewError(fiber.StatusBadRequest, message)
 	}
 
 	return utils.SuccessPresenter(user, "User created.", ctx)
