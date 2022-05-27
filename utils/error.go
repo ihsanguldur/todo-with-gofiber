@@ -14,9 +14,5 @@ func ErrorHandler(ctx *fiber.Ctx, err error) error {
 		errMessage = e.Message
 	}
 
-	return ctx.Status(errCode).JSON(fiber.Map{
-		"success": false,
-		"message": errMessage,
-		"data":    nil,
-	})
+	return ErrorPresenter(errCode, errMessage, ctx)
 }
