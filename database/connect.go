@@ -28,8 +28,4 @@ func ConnectDB() {
 	}
 
 	fmt.Println("Connection Opened to Database.")
-	/*if err = DB.AutoMigrate(&models.Todo{}, &models.User{}); err != nil {
-		log.Fatal("error while Migrating.")
-	}
-	fmt.Println("Database migrated.")*/
 }
