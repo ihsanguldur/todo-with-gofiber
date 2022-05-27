@@ -9,4 +9,6 @@ func UserRouter(api fiber.Router) {
 
 	api.Post("/user", handlers.Create)
 	api.Get("/user/:id", handlers.GetUser)
+	api.Get("/user", handlers.GetUsers)
+	api.Put("/user", handlers.UpdateUser)
 }
