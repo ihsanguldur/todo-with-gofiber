@@ -1,16 +1,14 @@
 package models
 
 import (
-	"gorm.io/gorm"
 	"time"
 )
 
 type Todo struct {
-	gorm.Model
-	ID        uint      `json:"todo_id"`
-	Body      string    `json:"todo_body"`
+	TodoID    uint      `gorm:"primaryKey" json:"todo_id"`
+	TodoBody  string    `json:"todo_body"`
 	Done      bool      `json:"done"`
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
-	User      `json:"user"`
+	UserID    int       `json:"user_id"`
 }
