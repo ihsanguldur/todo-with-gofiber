@@ -92,10 +92,39 @@ func UpdateUser(ctx *fiber.Ctx) error {
 		}
 	}
 
-	if err = database.DB.Model(user).Clauses(clause.Returning{}).Updates(user).Error; err != nil {
-		return fiber.NewError(fiber.StatusInternalServerError, "Error while updating.")
+	result := database.DB.Model(user).Clauses(clause.Returning{}).Updates(user)
+
+	if err = result.Error; err != nil {
+		message := "Error while updating."
+		if strings.Contains(err.Error(), "23505") {
+			message = "Email is already in use."
+		}
+		return fiber.NewError(fiber.StatusInternalServerError, message)
+	}
+
+	if result.RowsAffected == 0 {
+		return fiber.NewError(fiber.StatusNotFound, "User not found.")
 	}
 
 	return utils.SuccessPresenter(user, "User updated successfully.", ctx)
 
+}
+
+func DeleteUser(ctx *fiber.Ctx) error {
+
+	var err error
+	id := ctx.Params("id")
+	user := &models.User{}
+
+	result := database.DB.Clauses(clause.Returning{}).Delete(user, id)
+
+	if result.RowsAffected == 0 {
+		return fiber.NewError(fiber.StatusNotFound, "User not found.")
+	}
+
+	if err = result.Error; err != nil {
+		return fiber.NewError(fiber.StatusInternalServerError, "Error while deleting.")
+	}
+
+	return utils.SuccessPresenter(user, "User deleted successfully.", ctx)
 }

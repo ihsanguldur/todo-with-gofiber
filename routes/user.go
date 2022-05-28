@@ -11,4 +11,5 @@ func UserRouter(api fiber.Router) {
 	api.Get("/user/:id", handlers.GetUser)
 	api.Get("/user", handlers.GetUsers)
 	api.Put("/user", handlers.UpdateUser)
+	api.Delete("/user/:id", handlers.DeleteUser)
 }
