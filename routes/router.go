@@ -8,5 +8,5 @@ func SetupRoutes(app *fiber.App) {
 
 	UserRouter(api)
 	TodoRouter(api)
-
+	AuthRouter(api)
 }

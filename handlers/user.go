@@ -21,7 +21,7 @@ func Create(ctx *fiber.Ctx) error {
 	}
 
 	if !utils.IsPasswordValid(user.UserPassword) {
-		return fiber.NewError(fiber.StatusBadRequest, "Password must be 6 character.")
+		return fiber.NewError(fiber.StatusBadRequest, "Password must be 6 characters.")
 	}
 
 	if !utils.IsEmailValid(user.UserEmail) {
