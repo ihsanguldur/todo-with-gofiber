@@ -3,8 +3,8 @@ package utils
 import (
 	"github.com/golang-jwt/jwt/v4"
 	"log"
-	"os"
 	"time"
+	"todo/config"
 	"todo/models"
 )
 
@@ -16,7 +16,7 @@ func GenerateToken(credential *models.User) string {
 
 	t := jwt.NewWithClaims(jwt.SigningMethodHS256, claim)
 
-	token, err := t.SignedString([]byte(os.Getenv("JWT_SECRET")))
+	token, err := t.SignedString([]byte(config.Config("JWT_SECRET")))
 	if err != nil {
 		log.Fatal(err.Error())
 	}
