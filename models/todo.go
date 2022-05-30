@@ -10,4 +10,5 @@ type Todo struct {
 	Done      bool      `json:"done"`
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
+	UserID    uint      `json:"user_id"`
 }

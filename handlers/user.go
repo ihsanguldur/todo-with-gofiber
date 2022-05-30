@@ -12,7 +12,7 @@ import (
 	"todo/utils"
 )
 
-func Create(ctx *fiber.Ctx) error {
+func CreateUser(ctx *fiber.Ctx) error {
 	var err error
 	user := new(models.User)
 
@@ -127,11 +127,11 @@ func DeleteUser(ctx *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusNotFound, "User not found.")
 	}
 
-	database.DB.Where("todos.user_id = ?", id).Delete(&[]models.Todo{})
-
 	if err = result.Error; err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, "Error while deleting.")
 	}
+
+	database.DB.Where("todos.user_id = ?", id).Delete(&[]models.Todo{})
 
 	return utils.SuccessPresenter(user, "User deleted successfully.", ctx)
 }
