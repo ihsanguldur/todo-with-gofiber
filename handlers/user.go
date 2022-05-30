@@ -13,7 +13,6 @@ import (
 )
 
 func Create(ctx *fiber.Ctx) error {
-
 	var err error
 	user := new(models.User)
 
@@ -43,10 +42,8 @@ func Create(ctx *fiber.Ctx) error {
 }
 
 func GetUser(ctx *fiber.Ctx) error {
-
 	var err error
 	user := new(models.User)
-
 	id := ctx.Params("id")
 	token := ctx.Locals("user").(*jwt.Token)
 
@@ -76,7 +73,6 @@ func GetUsers(ctx *fiber.Ctx) error {
 }
 
 func UpdateUser(ctx *fiber.Ctx) error {
-
 	var err error
 	user := &models.User{}
 
@@ -89,7 +85,6 @@ func UpdateUser(ctx *fiber.Ctx) error {
 			return fiber.NewError(fiber.StatusBadRequest, "Password must be 6 character.")
 		}
 		user.UserPassword = utils.HashPassword(user.UserPassword)
-
 	}
 
 	if user.UserEmail != "" {
@@ -117,11 +112,9 @@ func UpdateUser(ctx *fiber.Ctx) error {
 }
 
 func DeleteUser(ctx *fiber.Ctx) error {
-
 	var err error
 	id := ctx.Params("id")
 	user := &models.User{}
-
 	token := ctx.Locals("user").(*jwt.Token)
 
 	if !utils.IsJWTValid(token, id) {
@@ -133,6 +126,8 @@ func DeleteUser(ctx *fiber.Ctx) error {
 	if result.RowsAffected == 0 {
 		return fiber.NewError(fiber.StatusNotFound, "User not found.")
 	}
+
+	database.DB.Where("todos.user_id = ?", id).Delete(&[]models.Todo{})
 
 	if err = result.Error; err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, "Error while deleting.")

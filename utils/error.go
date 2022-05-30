@@ -5,7 +5,6 @@ import (
 )
 
 func ErrorHandler(ctx *fiber.Ctx, err error) error {
-
 	errCode := fiber.StatusInternalServerError
 	errMessage := "Something gone wrong."
 

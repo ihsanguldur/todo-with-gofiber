@@ -13,11 +13,11 @@ func IsPasswordValid(password string) bool {
 func IsEmailValid(email string) bool {
 	_, err := mail.ParseAddress(email)
 	return err == nil
-
 }
 
 func IsJWTValid(t *jwt.Token, i string) bool {
 	id, err := strconv.Atoi(i)
+
 	if err != nil {
 		return false
 	}
@@ -27,5 +27,6 @@ func IsJWTValid(t *jwt.Token, i string) bool {
 	if id != uid {
 		return false
 	}
+
 	return true
 }

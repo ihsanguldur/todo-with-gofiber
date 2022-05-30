@@ -6,7 +6,5 @@ import (
 )
 
 func AuthRouter(api fiber.Router) {
-
 	api.Post("auth/login", handlers.Login)
-
 }

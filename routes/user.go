@@ -7,7 +7,6 @@ import (
 )
 
 func UserRouter(api fiber.Router) {
-
 	api.Post("/user", handlers.Create)
 	api.Get("/user/:id", middlewares.Protected(), handlers.GetUser)
 	api.Get("/user", handlers.GetUsers)

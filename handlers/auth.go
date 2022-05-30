@@ -10,7 +10,6 @@ import (
 )
 
 func Login(ctx *fiber.Ctx) error {
-
 	type LoginInput struct {
 		Email    string `json:"user_email"`
 		Password string `json:"user_password"`

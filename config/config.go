@@ -7,8 +7,8 @@ import (
 )
 
 func Config(key string) string {
-
 	err := godotenv.Load()
+
 	if err != nil {
 		log.Fatal("can not load .env file.")
 	}

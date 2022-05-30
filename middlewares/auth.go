@@ -8,17 +8,16 @@ import (
 )
 
 func Protected() fiber.Handler {
-
 	return jwtware.New(jwtware.Config{
 		SigningKey:   []byte(config.Config("JWT_SECRET")),
 		ErrorHandler: jwtError,
 	})
-
 }
 
 func jwtError(ctx *fiber.Ctx, err error) error {
 	if err.Error() == "Missing or malformed JWT" {
 		return utils.ErrorPresenter(fiber.StatusBadRequest, "Missing or malformed JWT", ctx)
 	}
+
 	return utils.ErrorPresenter(fiber.StatusUnauthorized, "Invalid or expired JWT", ctx)
 }

@@ -23,9 +23,11 @@ func GenerateToken(credential *models.User) string {
 	t := jwt.NewWithClaims(jwt.SigningMethodHS256, claim)
 
 	token, err := t.SignedString([]byte(config.Config("JWT_SECRET")))
+
 	if err != nil {
 		log.Fatal(err.Error())
 	}
+	
 	return token
 }
 
