@@ -2,14 +2,14 @@ package routes
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"todo/handlers"
+	"todo/middlewares"
 	"todo/utils"
 )
 
 func TodoRouter(api fiber.Router) {
 
-	api.Get("/todo", func(ctx *fiber.Ctx) error {
-		return utils.SuccessPresenter(nil, "todo get.", ctx)
-	})
+	api.Get("/todo/:user_id", middlewares.Protected(), handlers.GetUserTodos)
 
 	api.Post("/todo", func(ctx *fiber.Ctx) error {
 		return utils.SuccessPresenter(nil, "todo post.", ctx)

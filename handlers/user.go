@@ -3,6 +3,7 @@ package handlers
 import (
 	"errors"
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v4"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"strings"
@@ -47,6 +48,11 @@ func GetUser(ctx *fiber.Ctx) error {
 	user := new(models.User)
 
 	id := ctx.Params("id")
+	token := ctx.Locals("user").(*jwt.Token)
+
+	if !utils.IsJWTValid(token, id) {
+		return fiber.NewError(fiber.StatusUnauthorized, "invalid token id.")
+	}
 
 	if err = database.DB.First(&user, id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -115,6 +121,12 @@ func DeleteUser(ctx *fiber.Ctx) error {
 	var err error
 	id := ctx.Params("id")
 	user := &models.User{}
+
+	token := ctx.Locals("user").(*jwt.Token)
+
+	if !utils.IsJWTValid(token, id) {
+		return fiber.NewError(fiber.StatusUnauthorized, "invalid token id.")
+	}
 
 	result := database.DB.Clauses(clause.Returning{}).Delete(user, id)
 
