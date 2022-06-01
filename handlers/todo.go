@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 	"gorm.io/gorm/clause"
@@ -13,7 +12,7 @@ import (
 
 func CreateTodo(ctx *fiber.Ctx) error {
 	var err error
-	id := ctx.Params("user_id")
+	id := ctx.Query("uid")
 	todo := new(models.Todo)
 	token := ctx.Locals("user").(*jwt.Token)
 
@@ -32,13 +31,13 @@ func CreateTodo(ctx *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusInternalServerError, "Database error.")
 	}
 
-	return utils.SuccessPresenter(todo, fmt.Sprintf("%s", id), ctx)
+	return utils.SuccessPresenter(todo, "todo created.", ctx)
 }
 
 func GetUserTodos(ctx *fiber.Ctx) error {
 	var err error
 	todos := &[]models.Todo{}
-	id := ctx.Params("user_id")
+	id := ctx.Query("uid")
 	token := ctx.Locals("user").(*jwt.Token)
 
 	if !utils.IsJWTValid(token, id) {
@@ -62,10 +61,11 @@ func GetUserTodos(ctx *fiber.Ctx) error {
 func UpdateTodo(ctx *fiber.Ctx) error {
 	var err error
 	todo := &models.Todo{}
-	id := ctx.Params("user_id")
+	uid := ctx.Query("uid")
+	tid := ctx.Query("tid")
 	token := ctx.Locals("user").(*jwt.Token)
 
-	if !utils.IsJWTValid(token, id) {
+	if !utils.IsJWTValid(token, uid) {
 		return fiber.NewError(fiber.StatusUnauthorized, "invalid token id.")
 	}
 
@@ -73,7 +73,7 @@ func UpdateTodo(ctx *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusBadRequest, "Corrupted body.")
 	}
 
-	result := database.DB.Where("todo_id = ?", todo.TodoID).Updates(todo)
+	result := database.DB.Where("todo_id = ?", tid).Updates(todo)
 
 	if err = result.Error; err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, "database error.")

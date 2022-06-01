@@ -7,8 +7,8 @@ import (
 )
 
 func TodoRouter(api fiber.Router) {
-	api.Get("/todo/:user_id", middlewares.Protected(), handlers.GetUserTodos)
-	api.Post("/todo/:user_id", middlewares.Protected(), handlers.CreateTodo)
-	api.Put("/todo/:user_id", middlewares.Protected(), handlers.UpdateTodo)
+	api.Get("/todo", middlewares.Protected(), handlers.GetUserTodos)
+	api.Post("/todo", middlewares.Protected(), handlers.CreateTodo)
+	api.Put("/todo", middlewares.Protected(), handlers.UpdateTodo)
 	api.Delete("/todo", middlewares.Protected(), handlers.DeleteTodo)
 }
