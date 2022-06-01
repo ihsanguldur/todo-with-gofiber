@@ -5,6 +5,7 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 	"gorm.io/gorm/clause"
 	"strconv"
+	"strings"
 	"todo/database"
 	"todo/models"
 	"todo/utils"
@@ -24,10 +25,17 @@ func CreateTodo(ctx *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusBadRequest, "Corrupted body.")
 	}
 
+	if todo.TodoBody == "" {
+		return fiber.NewError(fiber.StatusBadRequest, "Body can not be empty.")
+	}
+	
 	uid, _ := strconv.ParseUint(id, 10, 64)
 	todo.UserID = uint(uid)
 
 	if err = database.DB.Create(todo).Error; err != nil {
+		if strings.Contains(err.Error(), "23502") {
+			return fiber.NewError(fiber.StatusBadRequest, "Required fields can not be null.")
+		}
 		return fiber.NewError(fiber.StatusInternalServerError, "Database error.")
 	}
 
@@ -73,7 +81,11 @@ func UpdateTodo(ctx *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusBadRequest, "Corrupted body.")
 	}
 
-	result := database.DB.Where("todo_id = ?", tid).Updates(todo)
+	if todo.TodoBody == "" {
+		return fiber.NewError(fiber.StatusBadRequest, "Body can not be empty.")
+	}
+
+	result := database.DB.Where("todo_id = ?", tid).Clauses(clause.Returning{}).Updates(todo)
 
 	if err = result.Error; err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, "database error.")

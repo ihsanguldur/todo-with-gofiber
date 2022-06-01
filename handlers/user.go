@@ -20,6 +20,10 @@ func CreateUser(ctx *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusBadRequest, "Corrupted body.")
 	}
 
+	if user.UserName == "" || user.UserSurname == "" {
+		return fiber.NewError(fiber.StatusBadRequest, "Name and Surname can not be empty.")
+	}
+
 	if !utils.IsPasswordValid(user.UserPassword) {
 		return fiber.NewError(fiber.StatusBadRequest, "Password must be 6 characters.")
 	}

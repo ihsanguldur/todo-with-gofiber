@@ -6,7 +6,7 @@ import (
 
 type Todo struct {
 	TodoID    uint      `gorm:"primaryKey" json:"todo_id"`
-	TodoBody  *string   `json:"todo_body"`
+	TodoBody  string    `json:"todo_body"`
 	Done      bool      `json:"done"`
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
